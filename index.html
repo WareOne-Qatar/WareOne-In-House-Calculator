@@ -1,0 +1,1086 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>In-House vs WareOne — Delivery Cost Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F3ED;
+    --surface: #FFFFFF;
+    --surface-2: #FBFAF6;
+    --ink: #1B2430;
+    --ink-soft: #5B6572;
+    --ink-faint: #8A9099;
+    --line: #DCD5C6;
+    --maroon: #8A1538;
+    --maroon-ink: #5E0E27;
+    --maroon-soft: #F5E3E9;
+    --blue: #0E7BBE;
+    --blue-ink: #0A5A8A;
+    --blue-soft: #DEEEF7;
+    --brand-chip: #6E1030;
+    --shadow: 0 1px 2px rgba(27,36,48,0.06), 0 8px 24px rgba(27,36,48,0.05);
+    --font-display: 'Lexend Deca', 'Arial Narrow', sans-serif;
+    --font-body: 'Lexend Deca', 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121821;
+      --surface: #1A222C;
+      --surface-2: #1F2836;
+      --ink: #EEEAE1;
+      --ink-soft: #A2ABB5;
+      --ink-faint: #6E7681;
+      --line: #2C3644;
+      --maroon: #E0759A;
+      --maroon-ink: #F3AFC4;
+      --maroon-soft: #3A1420;
+      --blue: #4FB4E8;
+      --blue-ink: #A9DDF5;
+      --blue-soft: #123044;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121821;
+    --surface: #1A222C;
+    --surface-2: #1F2836;
+    --ink: #EEEAE1;
+    --ink-soft: #A2ABB5;
+    --ink-faint: #6E7681;
+    --line: #2C3644;
+    --maroon: #E0759A;
+    --maroon-ink: #F3AFC4;
+    --maroon-soft: #3A1420;
+    --blue: #4FB4E8;
+    --blue-ink: #A9DDF5;
+    --blue-soft: #123044;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 36px clamp(20px, 4vw, 56px) 64px;
+  }
+
+  .header-band {
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 34px clamp(20px, 4vw, 56px) 30px;
+  }
+
+  .brandmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 20px;
+  }
+  .brandmark-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--brand-chip);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .brandmark-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15.5px;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+
+  .eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-faint);
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .eyebrow-row svg { flex-shrink: 0; }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(26px, 3.2vw, 38px);
+    line-height: 1.15;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .site-footer {
+    width: 100%;
+    border-top: 1px solid var(--line);
+  }
+  .footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 22px clamp(20px, 4vw, 56px) 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-faint);
+    font-size: 12.5px;
+  }
+  .footer-brand .brandmark-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    font-size: 10px;
+  }
+  .footer-note {
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  .input-column {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .modules {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .connector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+  }
+  .connector .line {
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed var(--line);
+  }
+  .connector .arrow {
+    position: absolute;
+    background: var(--bg);
+    color: var(--ink-faint);
+    font-size: 15px;
+    padding: 0 6px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px 22px;
+    box-shadow: var(--shadow);
+  }
+  .card.current { border-left: 3px solid var(--maroon); }
+  .card.wareone { border-left: 3px solid var(--blue); }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .card.current .card-title { color: var(--maroon-ink); }
+  .card.wareone .card-title { color: var(--blue-ink); }
+  .card-tag {
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+  }
+  .card-desc {
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    margin: 0 0 18px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  .field-hint { font-weight: 400; color: var(--ink-faint); }
+  .input-row {
+    display: flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .input-row .unit {
+    padding: 0 10px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+  .input-row input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+  }
+  .input-row:focus-within {
+    border-color: var(--ink-faint);
+  }
+  .input-row input::-webkit-outer-spin-button,
+  .input-row input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .linked-field .input-row { background: var(--surface); }
+  .linked-note {
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-top: 5px;
+  }
+  .linked-note button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--blue-ink);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .card-readout {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .readout-item .k { font-size: 12px; color: var(--ink-faint); margin-bottom: 3px; }
+  .readout-item .v { font-family: var(--font-mono); font-size: 16px; font-weight: 600; }
+  .card.current .readout-item .v { color: var(--maroon-ink); }
+  .card.wareone .readout-item .v { color: var(--blue-ink); }
+  .readout-item .note { font-size: 11px; color: var(--ink-faint); margin-top: 3px; font-family: var(--font-body); }
+
+  .toggle-block {
+    margin: 16px 0 14px;
+    padding: 14px 14px 4px;
+    background: var(--maroon-soft);
+    border-radius: 10px;
+  }
+  .toggle-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    cursor: pointer;
+  }
+  .toggle-row input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--maroon);
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+  .toggle-row .toggle-text { font-size: 13px; }
+  .toggle-row .toggle-title { font-weight: 600; color: var(--maroon-ink); display: block; }
+  .toggle-row .toggle-sub { color: var(--ink-soft); font-size: 12px; }
+  .mgmt-fields {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mgmt-fields.is-hidden { display: none; }
+  .mgmt-fields .field { margin-bottom: 10px; }
+  .mgmt-fields label { font-size: 12px; }
+  .mgmt-fields.three-col { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 480px) {
+    .mgmt-fields.three-col { grid-template-columns: 1fr 1fr; }
+  }
+
+  .results {
+    margin-top: 24px;
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 28px 26px;
+    color: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .results-head {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: rgba(246,243,237,0.55);
+    margin-bottom: 18px;
+  }
+  :root[data-theme="dark"] .results-head { color: rgba(18,24,33,0.55); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .results-head { color: rgba(18,24,33,0.55); }
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) {
+    .results-grid { grid-template-columns: 1fr; gap: 18px; }
+  }
+  .result-block .rk {
+    font-size: 12.5px;
+    color: rgba(246,243,237,0.6);
+    margin-bottom: 6px;
+  }
+  :root[data-theme="dark"] .result-block .rk { color: rgba(18,24,33,0.6); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .result-block .rk { color: rgba(18,24,33,0.6); }
+  }
+  .result-block .rv {
+    font-family: var(--font-mono);
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 600;
+    color: var(--bg);
+    line-height: 1.1;
+  }
+  .result-block .rv.savings { color: #6FC4F0; }
+  .result-block .rv small { font-size: 15px; font-weight: 500; opacity: 0.7; }
+
+  .bars { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: 92px 1fr 74px; align-items: center; gap: 10px; font-size: 12.5px; }
+  .bar-label { color: rgba(246,243,237,0.7); }
+  :root[data-theme="dark"] .bar-label { color: rgba(18,24,33,0.7); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .bar-label { color: rgba(18,24,33,0.7); }
+  }
+  .bar-track { height: 10px; border-radius: 6px; background: rgba(246,243,237,0.12); overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; }
+  .bar-fill.maroon { background: var(--maroon); }
+  .bar-fill.blue { background: #6FC4F0; }
+  .bar-val { font-family: var(--font-mono); text-align: right; color: var(--bg); }
+
+  .foot-note {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    max-width: 68ch;
+  }
+
+  .sla-bar {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .sla-head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
+  .sla-title { font-family: var(--font-display); font-weight: 600; font-size: 14px; }
+  .sla-sub { font-size: 12px; color: var(--ink-soft); }
+  .sla-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sla-opt {
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .sla-opt:hover { border-color: var(--ink-faint); }
+  .sla-opt.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+    font-weight: 600;
+  }
+
+  .insight-block {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(128,128,128,0.35);
+  }
+  .insight-grid { margin-bottom: 14px; }
+  .insight-sentence {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(246,243,237,0.75);
+    max-width: 66ch;
+    margin: 0;
+  }
+  :root[data-theme="dark"] .insight-sentence { color: rgba(18,24,33,0.75); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .insight-sentence { color: rgba(18,24,33,0.75); }
+  }
+</style>
+</head>
+<body>
+<header class="header-band">
+  <div class="header-inner">
+    <div class="brandmark">
+      <span class="brandmark-icon">W</span>
+      <span class="brandmark-text">WareOne</span>
+    </div>
+    <div class="eyebrow-row">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 8h8M9 8l3-3M9 8l3 3M12 4h3v8h-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Delivery cost comparison</span>
+    </div>
+    <h1>What switching to WareOne actually costs</h1>
+    <p class="sub">Fill in the prospect's current in-house setup on the left, WareOne's per-order rate on the right — the numbers below update as you type. Built for use live on a sales call.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="input-column">
+  <div class="sla-bar">
+    <div class="sla-head">
+      <span class="sla-title">Delivery SLA</span>
+      <span class="sla-sub">Applies to both models — tighter windows cut how much one driver can carry, and usually carry a WareOne rush premium.</span>
+    </div>
+    <div class="sla-options" id="slaOptions">
+      <button type="button" class="sla-opt active" data-sla="sameday">Same-day</button>
+      <button type="button" class="sla-opt" data-sla="nextday">Next-day</button>
+      <button type="button" class="sla-opt" data-sla="4h">4-hour</button>
+      <button type="button" class="sla-opt" data-sla="2h">2-hour</button>
+      <button type="button" class="sla-opt" data-sla="1h">1-hour</button>
+    </div>
+  </div>
+
+  <div class="modules">
+    <div class="card current">
+      <div class="card-head">
+        <div class="card-title">Current model</div>
+        <div class="card-tag">in-house</div>
+      </div>
+      <p class="card-desc">Mostly fixed cost per driver, plus fuel that scales with distance — and headcount sized to cover the peak, not just the daily average.</p>
+
+      <div class="field">
+        <label for="dailyOrders">Daily order volume</label>
+        <div class="input-row">
+          <input id="dailyOrders" type="number" inputmode="decimal" min="0" step="5" value="150">
+          <span class="unit">orders/day</span>
+        </div>
+      </div>
+
+      <div class="toggle-block">
+        <label class="toggle-row">
+          <input type="checkbox" id="peakToggle" checked>
+          <span class="toggle-text">
+            <span class="toggle-title">Account for order peaking</span>
+            <span class="toggle-sub">If a chunk of the day's orders land in the same rush window, flat daily-average math undercounts the drivers actually needed.</span>
+          </span>
+        </label>
+        <div class="mgmt-fields three-col" id="peakFields">
+          <div class="field">
+            <label for="workingHours">Working hours per day</label>
+            <div class="input-row">
+              <input id="workingHours" type="number" inputmode="decimal" min="1" step="0.5" value="10">
+              <span class="unit">hrs</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="peakWindowHours">Peak window length</label>
+            <div class="input-row">
+              <input id="peakWindowHours" type="number" inputmode="decimal" min="0.25" step="0.25" value="2">
+              <span class="unit">hrs</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="peakOrders">Orders in the peak window</label>
+            <div class="input-row">
+              <input id="peakOrders" type="number" inputmode="decimal" min="0" step="5" value="45">
+              <span class="unit">orders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field linked-field">
+        <label for="delPerDriver">Deliveries per driver, per day</label>
+        <div class="input-row">
+          <input id="delPerDriver" type="number" inputmode="decimal" min="0" step="0.5" value="30">
+          <span class="unit">orders</span>
+        </div>
+        <div class="linked-note" id="delPerDriverNote"></div>
+      </div>
+
+      <div class="field">
+        <label for="workDays">Working days per month</label>
+        <div class="input-row">
+          <input id="workDays" type="number" inputmode="decimal" min="0" step="1" value="26">
+          <span class="unit">days</span>
+        </div>
+      </div>
+
+      <div class="field linked-field">
+        <label for="drivers">Drivers needed</label>
+        <div class="input-row">
+          <input id="drivers" type="number" inputmode="decimal" min="0" step="1" value="8">
+          <span class="unit">drivers</span>
+        </div>
+        <div class="linked-note" id="driversNote"></div>
+      </div>
+
+      <div class="field">
+        <label for="avgDistanceKm">Average distance per delivery</label>
+        <div class="input-row">
+          <input id="avgDistanceKm" type="number" inputmode="decimal" min="0" step="0.5" value="6">
+          <span class="unit">km</span>
+        </div>
+      </div>
+
+      <div class="toggle-block">
+        <label class="toggle-row">
+          <input type="checkbox" id="speedCapToggle">
+          <span class="toggle-text">
+            <span class="toggle-title">Cap capacity by distance &amp; speed</span>
+            <span class="toggle-sub">Optional, off by default. When on, physical drive-time can reduce a driver's SLA-tier capacity — it never raises it above the tier's target.</span>
+          </span>
+        </label>
+        <div class="mgmt-fields" id="speedFields">
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="effSpeed">Effective speed <span class="field-hint">(incl. stops/traffic)</span></label>
+            <div class="input-row">
+              <input id="effSpeed" type="number" inputmode="decimal" min="1" step="1" value="20">
+              <span class="unit">km/h</span>
+            </div>
+            <div class="linked-note" id="speedCaption"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fuelPerKm">Fuel cost per km</label>
+        <div class="input-row">
+          <span class="unit">QAR</span>
+          <input id="fuelPerKm" type="number" inputmode="decimal" min="0" step="0.05" value="0.35">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="costPerDriver">Fixed cost per driver, per month <span class="field-hint">(excl. fuel)</span></label>
+        <div class="input-row">
+          <span class="unit">QAR</span>
+          <input id="costPerDriver" type="number" inputmode="decimal" min="0" step="50" value="5500">
+        </div>
+      </div>
+
+      <div class="toggle-block">
+        <label class="toggle-row">
+          <input type="checkbox" id="mgmtToggle" checked>
+          <span class="toggle-text">
+            <span class="toggle-title">Factor in a manager as the fleet grows</span>
+            <span class="toggle-sub">Past a certain driver count, in-house ops need a manager to coordinate routes, handle exceptions, and supervise the team.</span>
+          </span>
+        </label>
+        <div class="mgmt-fields" id="mgmtFields">
+          <div class="field">
+            <label for="driversPerManager">One manager per</label>
+            <div class="input-row">
+              <input id="driversPerManager" type="number" inputmode="decimal" min="1" step="1" value="8">
+              <span class="unit">drivers</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="managerCost">Manager cost, per month</label>
+            <div class="input-row">
+              <span class="unit">QAR</span>
+              <input id="managerCost" type="number" inputmode="decimal" min="0" step="100" value="9000">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-readout">
+        <div class="readout-item">
+          <div class="k">Monthly deliveries</div>
+          <div class="v" id="out-currentVolume">—</div>
+        </div>
+        <div class="readout-item">
+          <div class="k">Monthly cost</div>
+          <div class="v" id="out-currentCost">—</div>
+          <div class="note" id="out-currentCostNote"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">
+      <div class="line"></div>
+      <div class="arrow">↓</div>
+    </div>
+
+    <div class="card wareone">
+      <div class="card-head">
+        <div class="card-title">WareOne model</div>
+        <div class="card-tag">pay per order</div>
+      </div>
+      <p class="card-desc">Variable cost — they only pay for orders actually delivered.</p>
+
+      <div class="field linked-field">
+        <label for="pricePerOrder">WareOne price per order</label>
+        <div class="input-row">
+          <span class="unit">QAR</span>
+          <input id="pricePerOrder" type="number" inputmode="decimal" min="0" step="0.5" value="10">
+        </div>
+        <div class="linked-note" id="priceNote"></div>
+      </div>
+
+      <div class="field linked-field">
+        <label for="orderVolume">Monthly order volume</label>
+        <div class="input-row">
+          <input id="orderVolume" type="number" inputmode="decimal" min="0" step="1" value="3900">
+          <span class="unit">orders</span>
+        </div>
+        <div class="linked-note" id="volumeNote">Linked to current-model volume — <button type="button" id="editVolumeBtn">edit manually</button></div>
+      </div>
+
+      <div class="card-readout">
+        <div class="readout-item">
+          <div class="k">Monthly cost</div>
+          <div class="v" id="out-wareoneCost">—</div>
+        </div>
+        <div class="readout-item">
+          <div class="k">Cost per delivery</div>
+          <div class="v" id="out-wareonePerDelivery">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="results">
+    <div class="results-head">DAILY COMPARISON</div>
+    <div class="results-grid">
+      <div class="result-block">
+        <div class="rk">Cost per delivery today</div>
+        <div class="rv" id="res-currentPerDelivery">QAR —</div>
+      </div>
+      <div class="result-block">
+        <div class="rk">Cost per delivery with WareOne</div>
+        <div class="rv" id="res-wareonePerDelivery">QAR —</div>
+      </div>
+      <div class="result-block">
+        <div class="rk">Daily savings</div>
+        <div class="rv savings" id="res-dailySavings">QAR — <small id="res-dailySavingsPct"></small></div>
+      </div>
+    </div>
+    <div class="bars">
+      <div class="bar-row">
+        <span class="bar-label">Current</span>
+        <div class="bar-track"><div class="bar-fill maroon" id="bar-current" style="width:0%"></div></div>
+        <span class="bar-val" id="bar-current-val">—</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">WareOne</span>
+        <div class="bar-track"><div class="bar-fill blue" id="bar-wareone" style="width:0%"></div></div>
+        <span class="bar-val" id="bar-wareone-val">—</span>
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="results-head">MONTHLY COST COMPARISON</div>
+      <div class="results-grid">
+        <div class="result-block">
+          <div class="rk">Current, per month</div>
+          <div class="rv" id="res-currentMonthlyCost">QAR —</div>
+        </div>
+        <div class="result-block">
+          <div class="rk">WareOne, per month</div>
+          <div class="rv" id="res-wareoneMonthlyCost">QAR —</div>
+        </div>
+        <div class="result-block">
+          <div class="rk">Monthly savings</div>
+          <div class="rv savings" id="res-monthlySavings">QAR — <small id="res-monthlySavingsPct"></small></div>
+        </div>
+      </div>
+      <div class="bars">
+        <div class="bar-row">
+          <span class="bar-label">Current</span>
+          <div class="bar-track"><div class="bar-fill maroon" id="bar-current-monthly" style="width:0%"></div></div>
+          <span class="bar-val" id="bar-current-monthly-val">—</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">WareOne</span>
+          <div class="bar-track"><div class="bar-fill blue" id="bar-wareone-monthly" style="width:0%"></div></div>
+          <span class="bar-val" id="bar-wareone-monthly-val">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <div class="results-head">AVG DRIVER UTILISATION</div>
+      <div class="result-block" style="margin-bottom: 10px;">
+        <div class="rk">Utilisation today</div>
+        <div class="rv" id="out-driverUtilisation">—</div>
+      </div>
+      <p class="insight-sentence" id="out-driverUtilisationNote">—</p>
+    </div>
+  </div>
+
+  <p class="foot-note">All figures are planning estimates you enter live — not verified rates or a live data feed. Swap in the prospect's real order volume, distances, effective speed, costs, and WareOne's actual quoted rate and SLA-tier values, before using this in front of a client.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brandmark-icon">W</span>
+      <span>WareOne Logistics</span>
+    </div>
+    <div class="footer-note">Delivery cost calculator · internal sales tool</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 0 }) : '—';
+  const fmt2 = (n) => isFinite(n) ? n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—';
+
+  const SLA_PRESETS = {
+    sameday: { label: 'Same-day', capacityPerDay: 30,   basePrice: 10 },
+    nextday: { label: 'Next-day', capacityPerDay: 36,   basePrice: 10 },
+    '4h':    { label: '4-hour',   capacityPerDay: 21,   basePrice: 12 },
+    '2h':    { label: '2-hour',   capacityPerDay: 13.5, basePrice: 14 },
+    '1h':    { label: '1-hour',   capacityPerDay: 7.5,  basePrice: 20 },
+  };
+
+  const dailyOrdersInput = $('dailyOrders');
+  const peakToggle = $('peakToggle'), peakFields = $('peakFields'), workingHours = $('workingHours'), peakWindowHours = $('peakWindowHours'), peakOrders = $('peakOrders');
+  const delPerDriver = $('delPerDriver'), workDays = $('workDays');
+  const drivers = $('drivers'), driversNote = $('driversNote');
+  const avgDistanceKm = $('avgDistanceKm'), effSpeed = $('effSpeed'), fuelPerKm = $('fuelPerKm'), costPerDriver = $('costPerDriver');
+  const pricePerOrder = $('pricePerOrder'), orderVolume = $('orderVolume');
+  const editVolumeBtn = $('editVolumeBtn'), volumeNote = $('volumeNote');
+  const mgmtToggle = $('mgmtToggle'), mgmtFields = $('mgmtFields'), driversPerManager = $('driversPerManager'), managerCost = $('managerCost');
+  const slaOptions = $('slaOptions');
+  const delPerDriverNote = $('delPerDriverNote');
+  const priceNote = $('priceNote');
+  const speedCapToggle = $('speedCapToggle'), speedCaption = $('speedCaption');
+
+  let volumeLinked = true;
+  let driversLinked = true;
+  let selectedSla = 'sameday';
+  let delPerDriverLinked = true;
+  let priceLinked = true;
+
+  function num(el) {
+    const v = parseFloat(el.value);
+    return isFinite(v) ? v : 0;
+  }
+
+  function recalc() {
+    const nDailyOrders = num(dailyOrdersInput);
+    const nWorkDays = num(workDays);
+    const nWorkingHours = num(workingHours);
+    const nAvgDistanceKm = num(avgDistanceKm);
+    const nFuelPerKm = num(fuelPerKm);
+    const nEffSpeed = num(effSpeed);
+
+    // SLA tier: sets a driver's TARGET capacity AND WareOne's price per order directly —
+    // both are per-tier values, not a same-day baseline scaled by a multiplier.
+    const preset = SLA_PRESETS[selectedSla];
+    if (delPerDriverLinked) delPerDriver.value = preset.capacityPerDay;
+    if (priceLinked) pricePerOrder.value = preset.basePrice;
+    const nDelPerDriverTarget = num(delPerDriver);
+
+    // Physical time budget: distance ÷ effective speed = time per delivery; working hours ÷ that
+    // = the most stops physically possible in a shift. This is OPTIONAL — off by default — and
+    // when on, only ever shrinks the SLA tier's target capacity, never raises it.
+    const speedCapOn = speedCapToggle.checked;
+    const timePerDeliveryHours = nEffSpeed > 0 ? nAvgDistanceKm / nEffSpeed : 0;
+    const timeBudgetCap = (nWorkingHours > 0 && timePerDeliveryHours > 0) ? nWorkingHours / timePerDeliveryHours : Infinity;
+    const effDelPerDriver = speedCapOn ? Math.min(nDelPerDriverTarget, timeBudgetCap) : nDelPerDriverTarget;
+    const isTimeCapped = speedCapOn && isFinite(timeBudgetCap) && effDelPerDriver < nDelPerDriverTarget - 1e-9;
+    const capClause = isTimeCapped
+      ? (', but capped to ' + fmt2(effDelPerDriver) + ': at ' + fmt2(nAvgDistanceKm) + ' km/delivery and ' + fmt2(nEffSpeed) + ' km/h, that\u2019s all one driver fits in ' + fmt2(nWorkingHours) + ' working hours')
+      : '';
+
+    // Caption under the speed field: always shows the time-budget capacity for this SLA,
+    // whether or not it's actually being applied as a cap.
+    if (!isFinite(timeBudgetCap)) {
+      speedCaption.textContent = 'Enter a distance and speed to see how many orders that supports.';
+    } else {
+      const vsTarget = timeBudgetCap < nDelPerDriverTarget - 1e-9
+        ? ('below ' + preset.label + '\u2019s ' + fmt2(nDelPerDriverTarget) + '/day target' + (speedCapOn ? ' — capacity is capped to this.' : ' — cap is off, so the target still applies.'))
+        : ('comfortably covers ' + preset.label + '\u2019s ' + fmt2(nDelPerDriverTarget) + '/day target.');
+      speedCaption.textContent = 'At ' + fmt2(nAvgDistanceKm) + ' km and ' + fmt2(nEffSpeed) + ' km/h, one driver can make about ' + fmt2(timeBudgetCap) + ' orders/day in a ' + fmt2(nWorkingHours) + '-hour shift — ' + vsTarget;
+    }
+
+    delPerDriverNote.innerHTML = (delPerDriverLinked
+      ? ('Auto-set by ' + preset.label + ' — ' + fmt2(nDelPerDriverTarget) + '/driver/day at this SLA' + capClause + '. <button type="button" id="editDelPerDriverBtn">edit manually</button>')
+      : ('Editing manually' + capClause + ' — <button type="button" id="relinkDelPerDriverBtn">re-link to ' + preset.label + '</button>'));
+
+    // Drivers needed: cover the daily average AND the peak window, whichever needs more —
+    // using the SLA-adjusted, distance-capped effective capacity.
+    const peakOn = peakToggle.checked;
+    peakFields.classList.toggle('is-hidden', !peakOn);
+    const nPeakWindowHours = num(peakWindowHours);
+    const nPeakOrders = num(peakOrders);
+
+    const monthlyOrdersTotal = nWorkDays > 0 ? nDailyOrders * nWorkDays : 0;
+    const driversForAverage = effDelPerDriver > 0 ? Math.ceil(nDailyOrders / effDelPerDriver) : 0;
+    let driversForPeak = driversForAverage;
+    if (peakOn && nWorkingHours > 0) {
+      const perHour = effDelPerDriver / nWorkingHours;
+      const capacityInPeakWindow = perHour * nPeakWindowHours;
+      driversForPeak = capacityInPeakWindow > 0 ? Math.ceil(nPeakOrders / capacityInPeakWindow) : driversForAverage;
+    }
+    const driversNeeded = Math.max(driversForAverage, driversForPeak);
+
+    if (driversLinked) {
+      drivers.value = driversNeeded;
+    }
+    const nDrivers = num(drivers);
+
+    if (driversLinked) {
+      driversNote.innerHTML = (peakOn && driversForPeak > driversForAverage)
+        ? ('Auto: ' + driversForAverage + ' for average load, ' + driversForPeak + ' to cover ' + fmt(nPeakOrders) + ' orders in the ' + fmt2(nPeakWindowHours) + '-hour peak — using the higher number. <button type="button" id="editDriversBtn">edit manually</button>')
+        : ('Auto-calculated from order volume — <button type="button" id="editDriversBtn">edit manually</button>');
+    } else {
+      driversNote.innerHTML = 'Editing manually — <button type="button" id="relinkDriversBtn">re-link to auto-calculated</button>';
+    }
+
+    // Cost build-up: fixed driver cost + distance-based fuel (scales with actual orders) + management.
+    const nCostPerDriver = num(costPerDriver);
+    const fuelPerDelivery = nAvgDistanceKm * nFuelPerKm;
+
+    const currentVolume = monthlyOrdersTotal;
+    const driverFixedCost = nDrivers * nCostPerDriver;
+    const fuelCost = currentVolume * fuelPerDelivery;
+
+    const mgmtOn = mgmtToggle.checked;
+    mgmtFields.classList.toggle('is-hidden', !mgmtOn);
+    const nDriversPerManager = Math.max(1, num(driversPerManager));
+    const nManagerCost = num(managerCost);
+    const managersNeeded = mgmtOn && nDrivers > 0 ? Math.ceil(nDrivers / nDriversPerManager) : 0;
+    const managementCost = managersNeeded * nManagerCost;
+
+    const currentCost = driverFixedCost + fuelCost + managementCost;
+    const currentPerDelivery = currentVolume > 0 ? currentCost / currentVolume : 0;
+
+    if (volumeLinked) {
+      orderVolume.value = currentVolume ? currentVolume : 0;
+    }
+
+    const effPricePerOrder = num(pricePerOrder);
+    const nOrderVolume = num(orderVolume);
+    const wareoneCost = nOrderVolume * effPricePerOrder;
+    const wareonePerDelivery = effPricePerOrder;
+
+    priceNote.innerHTML = (priceLinked
+      ? ('Auto-set by ' + preset.label + ' — QAR ' + fmt2(effPricePerOrder) + '/order. <button type="button" id="editPriceBtn">edit manually</button>')
+      : ('Editing manually — <button type="button" id="relinkPriceBtn">re-link to ' + preset.label + '</button>'));
+
+    // Avg driver utilisation: how much of the current fleet's total capacity the actual
+    // volume is using up. Below full capacity means the fleet has room to spare;
+    // near/above it means drivers are running close to flat-out.
+    const totalCapacity = nDrivers * effDelPerDriver;
+    const driverUtilisation = totalCapacity > 0 ? nDailyOrders / totalCapacity : 0;
+    const spareCapacity = totalCapacity - nDailyOrders;
+    $('out-driverUtilisation').textContent = totalCapacity > 0 ? (driverUtilisation * 100).toFixed(0) + '%' : '—';
+    $('out-driverUtilisationNote').textContent = totalCapacity > 0
+      ? (fmt(nDailyOrders) + ' orders/day across ' + nDrivers + ' driver' + (nDrivers > 1 ? 's' : '') + ' (' + fmt(totalCapacity) + '/day capacity) — ' +
+         (spareCapacity >= 0
+            ? 'room for ' + fmt(spareCapacity) + ' more orders/day before needing another driver.'
+            : fmt(Math.abs(spareCapacity)) + ' orders/day over capacity at this headcount.'))
+      : 'Enter drivers and capacity to see utilisation.';
+
+    $('out-currentVolume').textContent = fmt(currentVolume) + ' orders';
+    $('out-currentCost').textContent = 'QAR ' + fmt(currentCost);
+    const noteParts = [];
+    if (fuelCost > 0) noteParts.push('QAR ' + fmt(fuelCost) + ' fuel');
+    if (managersNeeded > 0) noteParts.push('QAR ' + fmt(managementCost) + ' · ' + managersNeeded + ' manager' + (managersNeeded > 1 ? 's' : ''));
+    $('out-currentCostNote').textContent = noteParts.length ? ('incl. ' + noteParts.join(' + ')) : '';
+    $('out-wareoneCost').textContent = 'QAR ' + fmt(wareoneCost);
+    $('out-wareonePerDelivery').textContent = 'QAR ' + fmt2(wareonePerDelivery);
+
+    $('res-currentPerDelivery').textContent = currentVolume > 0 ? 'QAR ' + fmt2(currentPerDelivery) : 'QAR —';
+    $('res-wareonePerDelivery').textContent = 'QAR ' + fmt2(wareonePerDelivery);
+
+    const savings = currentCost - wareoneCost;
+    const savingsPct = currentCost > 0 ? (savings / currentCost) * 100 : 0;
+
+    // Daily savings now lives in the first (per-delivery) comparison block.
+    const dailyCurrentCost = nWorkDays > 0 ? currentCost / nWorkDays : 0;
+    const dailyWareoneCost = nWorkDays > 0 ? wareoneCost / nWorkDays : 0;
+    const dailySavings = dailyCurrentCost - dailyWareoneCost;
+    const dailySavingsPct = dailyCurrentCost > 0 ? (dailySavings / dailyCurrentCost) * 100 : 0;
+
+    const dailySavingsEl = $('res-dailySavings');
+    dailySavingsEl.firstChild.textContent = 'QAR ' + fmt(dailySavings) + ' ';
+    $('res-dailySavingsPct').textContent = dailyCurrentCost > 0 ? (dailySavingsPct >= 0 ? '(' + fmt2(dailySavingsPct) + '% lower)' : '(' + fmt2(Math.abs(dailySavingsPct)) + '% higher)') : '';
+    dailySavingsEl.style.color = dailySavings >= 0 ? '' : '#E08585';
+
+    $('res-currentMonthlyCost').textContent = 'QAR ' + fmt(currentCost);
+    $('res-wareoneMonthlyCost').textContent = 'QAR ' + fmt(wareoneCost);
+    const monthlySavingsEl = $('res-monthlySavings');
+    monthlySavingsEl.firstChild.textContent = 'QAR ' + fmt(savings) + ' ';
+    $('res-monthlySavingsPct').textContent = currentCost > 0 ? (savingsPct >= 0 ? '(' + fmt2(savingsPct) + '% lower)' : '(' + fmt2(Math.abs(savingsPct)) + '% higher)') : '';
+    monthlySavingsEl.style.color = savings >= 0 ? '' : '#E08585';
+
+    const maxMonthly = Math.max(currentCost, wareoneCost, 0.01);
+    $('bar-current-monthly').style.width = (currentCost / maxMonthly * 100).toFixed(1) + '%';
+    $('bar-wareone-monthly').style.width = (wareoneCost / maxMonthly * 100).toFixed(1) + '%';
+    $('bar-current-monthly-val').textContent = 'QAR ' + fmt(currentCost);
+    $('bar-wareone-monthly-val').textContent = 'QAR ' + fmt(wareoneCost);
+
+    const maxPD = Math.max(currentPerDelivery, wareonePerDelivery, 0.01);
+    $('bar-current').style.width = (currentPerDelivery / maxPD * 100).toFixed(1) + '%';
+    $('bar-wareone').style.width = (wareonePerDelivery / maxPD * 100).toFixed(1) + '%';
+    $('bar-current-val').textContent = currentVolume > 0 ? 'QAR ' + fmt2(currentPerDelivery) : '—';
+    $('bar-wareone-val').textContent = 'QAR ' + fmt2(wareonePerDelivery);
+  }
+
+  [dailyOrdersInput, workingHours, peakWindowHours, peakOrders, workDays, avgDistanceKm, effSpeed, fuelPerKm, costPerDriver, driversPerManager, managerCost].forEach(el => {
+    el.addEventListener('input', recalc);
+  });
+  peakToggle.addEventListener('change', recalc);
+  mgmtToggle.addEventListener('change', recalc);
+  speedCapToggle.addEventListener('change', recalc);
+
+  slaOptions.addEventListener('click', (e) => {
+    const btn = e.target.closest('.sla-opt');
+    if (!btn) return;
+    selectedSla = btn.dataset.sla;
+    Array.from(slaOptions.children).forEach(b => b.classList.toggle('active', b === btn));
+    delPerDriverLinked = true;
+    priceLinked = true;
+    recalc();
+  });
+
+  delPerDriver.addEventListener('input', () => {
+    delPerDriverLinked = false;
+    recalc();
+  });
+  delPerDriverNote.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'editDelPerDriverBtn') {
+      delPerDriverLinked = false;
+      recalc();
+    } else if (e.target && e.target.id === 'relinkDelPerDriverBtn') {
+      delPerDriverLinked = true;
+      recalc();
+    }
+  });
+
+  pricePerOrder.addEventListener('input', () => {
+    priceLinked = false;
+    recalc();
+  });
+  priceNote.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'editPriceBtn') {
+      priceLinked = false;
+      recalc();
+    } else if (e.target && e.target.id === 'relinkPriceBtn') {
+      priceLinked = true;
+      recalc();
+    }
+  });
+
+  drivers.addEventListener('input', () => {
+    driversLinked = false;
+    recalc();
+  });
+  driversNote.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'editDriversBtn') {
+      driversLinked = false;
+      recalc();
+    } else if (e.target && e.target.id === 'relinkDriversBtn') {
+      driversLinked = true;
+      recalc();
+    }
+  });
+
+  orderVolume.addEventListener('input', () => {
+    if (volumeLinked) {
+      volumeLinked = false;
+      volumeNote.innerHTML = 'Editing manually — <button type="button" id="relinkVolumeBtn">re-link to current volume</button>';
+      document.getElementById('relinkVolumeBtn').addEventListener('click', relink);
+    }
+    recalc();
+  });
+
+  function relink() {
+    volumeLinked = true;
+    volumeNote.innerHTML = 'Linked to current-model volume — <button type="button" id="editVolumeBtn">edit manually</button>';
+    document.getElementById('editVolumeBtn').addEventListener('click', unlink);
+    recalc();
+  }
+
+  function unlink() {
+    volumeLinked = false;
+    volumeNote.innerHTML = 'Editing manually — <button type="button" id="relinkVolumeBtn">re-link to current volume</button>';
+    document.getElementById('relinkVolumeBtn').addEventListener('click', relink);
+  }
+
+  editVolumeBtn.addEventListener('click', unlink);
+
+  recalc();
+})();
+</script>
+</body>
+</html>
+
+</body></html>
